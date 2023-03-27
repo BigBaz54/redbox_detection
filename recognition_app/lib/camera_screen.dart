@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'home_page.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({required this.cameras, Key? key}) : super(key: key);
@@ -44,7 +47,21 @@ class _CameraScreenState extends State<CameraScreen> {
   Widget build(BuildContext context) {
     if (cameraController.value.isInitialized) {
       return Scaffold(
-        body: Center(child: CameraPreview(cameraController)),
+        appBar: AppBar(
+          title: const Text('Live detection'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage(cameras: cameras,)),
+              );
+            },
+          ),
+        ),
+        body: Center(child: SizedBox(
+                                    height: MediaQuery.of(context).size.height/1.5,
+                                    child: CameraPreview(cameraController))),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             setState(() {
@@ -52,7 +69,7 @@ class _CameraScreenState extends State<CameraScreen> {
               startCamera(direction);
             });
           },
-          child: const Icon(Icons.camera_alt),
+          child: const Icon(Icons.flip_camera_android),
         ),
       );
     } else {
