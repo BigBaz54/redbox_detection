@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'home_page.dart';
 
-class CameraScreen extends StatefulWidget {
-  const CameraScreen({required this.cameras, Key? key}) : super(key: key);
+class DetectionPage extends StatefulWidget {
+  const DetectionPage({required this.cameras, Key? key}) : super(key: key);
 
   final List<CameraDescription> cameras;
 
   @override
-  State<CameraScreen> createState() => _CameraScreenState();
+  State<DetectionPage> createState() => _DetectionPageState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
+class _DetectionPageState extends State<DetectionPage> {
   late List<CameraDescription> cameras = widget.cameras;
   late CameraController cameraController;
 

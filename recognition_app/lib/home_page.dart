@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'camera_screen.dart';
+import 'detection_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({required this.cameras, Key? key}) : super(key: key);
@@ -60,7 +60,7 @@ class HomePage extends StatelessWidget {
                   // Action à effectuer lors du clic sur le bouton "Détection en direct"
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => CameraScreen(cameras: cameras)),
+                    MaterialPageRoute(builder: (context) => DetectionPage(cameras: cameras)),
                   );
                 },
                 child: const Text('Live detection'),
