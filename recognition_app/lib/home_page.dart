@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Action à effectuer lors du clic sur le bouton "Détection en direct"
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => CameraScreen(cameras: cameras)),
                 );

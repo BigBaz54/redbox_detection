@@ -52,7 +52,7 @@ class _CameraScreenState extends State<CameraScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => HomePage(cameras: cameras,)),
               );
