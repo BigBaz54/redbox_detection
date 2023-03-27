@@ -17,45 +17,56 @@ class HomePage extends StatelessWidget {
         title: const Text('Red box detection'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(180, 30),
-              ),
-              onPressed: () {
-                // Action à effectuer lors du clic sur le bouton "Prendre une photo"
-                print('Prendre une photo');
-              },
-              child: const Text('Take a picture'),
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: const Color.fromARGB(255, 15, 110, 0),
+              width: 2,
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(180, 30),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(180, 30),
+                ),
+                onPressed: () {
+                  // Action à effectuer lors du clic sur le bouton "Prendre une photo"
+                  print('Prendre une photo');
+                },
+                child: const Text('Take a picture'),
               ),
-              onPressed: () {
-                // Action à effectuer lors du clic sur le bouton "Choisir une photo dans la pellicule"
-                print('Choisir une photo dans la pellicule');
-              },
-              child: const Text('Chose from gallery'),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(180, 30),
-                backgroundColor: Color.fromARGB(255, 15, 110, 0)
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(180, 30),
+                ),
+                onPressed: () {
+                  // Action à effectuer lors du clic sur le bouton "Choisir une photo dans la pellicule"
+                  print('Choisir une photo dans la pellicule');
+                },
+                child: const Text('Chose from gallery'),
               ),
-              onPressed: () {
-                // Action à effectuer lors du clic sur le bouton "Détection en direct"
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => CameraScreen(cameras: cameras)),
-                );
-              },
-              child: const Text('Live detection'),
-            ),
-          ],
+              const SizedBox(height: 16),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(180, 30),
+                  backgroundColor: const Color.fromARGB(255, 15, 110, 0)
+                ),
+                onPressed: () {
+                  // Action à effectuer lors du clic sur le bouton "Détection en direct"
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => CameraScreen(cameras: cameras)),
+                  );
+                },
+                child: const Text('Live detection'),
+              ),
+            ],
+          ),
         ),
       ),
     );
