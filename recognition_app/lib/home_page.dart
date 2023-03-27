@@ -1,15 +1,26 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'detection_page.dart';
+import 'image_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({required this.cameras, Key? key}) : super(key: key);
+  
+  @override
+  State<HomePage> createState() => _HomePageState();
 
   final List<CameraDescription> cameras;
+}
+
+class _HomePageState extends State<HomePage> {
+  File? _image;
+  final _picker = ImagePicker();
+  late List<CameraDescription> cameras = widget.cameras;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,8 +46,7 @@ class HomePage extends StatelessWidget {
                   minimumSize: const Size(180, 30),
                 ),
                 onPressed: () {
-                  // Action à effectuer lors du clic sur le bouton "Prendre une photo"
-                  print('Prendre une photo');
+                  cameraButton(context);
                 },
                 child: const Text('Take a picture'),
               ),
@@ -45,8 +55,7 @@ class HomePage extends StatelessWidget {
                   minimumSize: const Size(180, 30),
                 ),
                 onPressed: () {
-                  // Action à effectuer lors du clic sur le bouton "Choisir une photo dans la pellicule"
-                  print('Choisir une photo dans la pellicule');
+                  galleryButton(context);
                 },
                 child: const Text('Chose from gallery'),
               ),
@@ -71,5 +80,51 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-}
 
+  void galleryButton(BuildContext context) async {
+    await pickImage(ImageSource.gallery);
+    if (_image == null) {
+      return;
+    }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => ImagePage(cameras: cameras, image: FileImage(_image!))),
+    );
+  }
+
+  void cameraButton(BuildContext context) async {
+    await pickImage(ImageSource.camera);
+    if (_image == null) {
+      return;
+    }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => ImagePage(cameras: cameras, image: FileImage(_image!))),
+    );
+  }
+  
+  Future<void> pickImage(ImageSource source) async {
+    final image = await _picker.pickImage(source: source);
+    // await getLostData();
+    if (image != null && (image.path.endsWith('.jpg') || image.path.endsWith('.jpeg') || image.path.endsWith('.png'))) {
+      _image = File(image.path);
+    }
+  }
+
+  Future<void> getLostData() async {
+  final LostDataResponse response =
+      await _picker.retrieveLostData();
+  if (response.isEmpty) {
+    print("Retrieved data is empty.");
+    return;
+  }
+  if (response.files != null) {
+    for (final XFile file in response.files!) {
+      print("Retrieved lost data: ${file.path}");
+      _image = File(file.path);
+    }
+  } else {
+    print("Error retrieving lost data: ${response.exception}");
+  }
+}
+}
