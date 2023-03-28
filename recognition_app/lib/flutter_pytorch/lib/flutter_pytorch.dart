@@ -330,7 +330,7 @@ class ModelObjectDetection {
     //double factorY = _imageHeight / _imageWidth * screen.width;
     //boxesColor ??= Color.fromRGBO(37, 213, 253, 1.0);
 
-    print(_recognitions.length);
+    // print(_recognitions.length);
     return LayoutBuilder(builder: (context, constraints) {
       debugPrint(
           'Max height: ${constraints.maxHeight}, max width: ${constraints.maxWidth}');

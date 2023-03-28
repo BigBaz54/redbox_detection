@@ -65,6 +65,7 @@ class _ImagePageState extends State<ImagePage> {
         ),
       body: Stack(
         children: [
+          objectModel.renderBoxesOnImage(image, objDetect, boxesColor: const Color.fromARGB(255, 0, 242, 255)),
           Center(
             child: Image(image: FileImage(widget.image)),
           ),
@@ -72,9 +73,7 @@ class _ImagePageState extends State<ImagePage> {
             alignment: Alignment.bottomCenter,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(100, 30),
-                  // moves the button at the bottom of the screen
-                  
+                  minimumSize: const Size(100, 30)
                 ),
                 onPressed: () {
                   runObjectDetection();

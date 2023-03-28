@@ -69,7 +69,6 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: const Color.fromARGB(255, 15, 110, 0)
                 ),
                 onPressed: () {
-                  // Action à effectuer lors du clic sur le bouton "Détection en direct"
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => DetectionPage(cameras: cameras, objectModel: objectModel)),
