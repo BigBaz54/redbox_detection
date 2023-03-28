@@ -26,7 +26,7 @@ class _ImagePageState extends State<ImagePage> {
   Future runObjectDetection() async {
     objDetect = await objectModel.getImagePrediction(
         await image.readAsBytes(),
-        minimumScore: 0.1,
+        minimumScore: 0.3,
         IOUThershold: 0.3);
     objDetect.forEach((element) {
       print({
