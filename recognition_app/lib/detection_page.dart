@@ -2,12 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter_pytorch/flutter_pytorch.dart';
 import 'home_page.dart';
 
 class DetectionPage extends StatefulWidget {
-  const DetectionPage({required this.cameras, Key? key}) : super(key: key);
+  const DetectionPage({required this.cameras, required this.objectModel, Key? key}) : super(key: key);
 
   final List<CameraDescription> cameras;
+  final ModelObjectDetection objectModel;
 
   @override
   State<DetectionPage> createState() => _DetectionPageState();
@@ -16,6 +18,7 @@ class DetectionPage extends StatefulWidget {
 class _DetectionPageState extends State<DetectionPage> {
   late List<CameraDescription> cameras = widget.cameras;
   late CameraController cameraController;
+  late ModelObjectDetection objectModel = widget.objectModel;
 
   int direction = 0;
 
@@ -54,7 +57,7 @@ class _DetectionPageState extends State<DetectionPage> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage(cameras: cameras,)),
+                MaterialPageRoute(builder: (context) => HomePage(cameras: cameras, objectModel: objectModel)),
               );
             },
           ),

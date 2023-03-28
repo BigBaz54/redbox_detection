@@ -6,20 +6,23 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'detection_page.dart';
 import 'image_page.dart';
+import 'package:flutter_pytorch/flutter_pytorch.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({required this.cameras, Key? key}) : super(key: key);
+  const HomePage({required this.cameras, required this.objectModel, Key? key}) : super(key: key);
   
   @override
   State<HomePage> createState() => _HomePageState();
 
   final List<CameraDescription> cameras;
+  final ModelObjectDetection objectModel;
 }
 
 class _HomePageState extends State<HomePage> {
   File? _image;
   final _picker = ImagePicker();
   late List<CameraDescription> cameras = widget.cameras;
+  late ModelObjectDetection objectModel = widget.objectModel;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                   // Action à effectuer lors du clic sur le bouton "Détection en direct"
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => DetectionPage(cameras: cameras)),
+                    MaterialPageRoute(builder: (context) => DetectionPage(cameras: cameras, objectModel: objectModel)),
                   );
                 },
                 child: const Text('Live detection'),
@@ -88,7 +91,7 @@ class _HomePageState extends State<HomePage> {
     }
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => ImagePage(cameras: cameras, image: FileImage(_image!))),
+      MaterialPageRoute(builder: (context) => ImagePage(cameras: cameras, image: FileImage(_image!), objectModel: objectModel)),
     );
   }
 
@@ -99,7 +102,7 @@ class _HomePageState extends State<HomePage> {
     }
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => ImagePage(cameras: cameras, image: FileImage(_image!))),
+      MaterialPageRoute(builder: (context) => ImagePage(cameras: cameras, image: FileImage(_image!), objectModel: objectModel)),
     );
   }
   

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: HomePage(cameras: cameras),
+      home: HomePage(cameras: cameras, objectModel: objectModel),
     );
   }
 
