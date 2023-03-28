@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
     }
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => ImagePage(cameras: cameras, image: FileImage(_image!), objectModel: objectModel)),
+      MaterialPageRoute(builder: (context) => ImagePage(cameras: cameras, image: _image!, objectModel: objectModel)),
     );
   }
 
@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
     }
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => ImagePage(cameras: cameras, image: FileImage(_image!), objectModel: objectModel)),
+      MaterialPageRoute(builder: (context) => ImagePage(cameras: cameras, image: _image!, objectModel: objectModel)),
     );
   }
   
