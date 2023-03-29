@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter_pytorch/flutter_pytorch.dart';
 import 'package:flutter_pytorch/pigeon.dart';
-import 'package:image_picker/image_picker.dart';
 import "dart:io";
 import 'package:flutter/material.dart';
 import 'home_page.dart';
@@ -29,6 +28,18 @@ class _ImagePageState extends State<ImagePage> {
         minimumScore: 0.3,
         IOUThershold: 0.3);
     objDetect.forEach((element) {
+      // double? left = element?.rect.left;
+      // double? top = element?.rect.top;
+      // double? right = element?.rect.right;
+      // double? bottom = element?.rect.bottom;
+      // double? width = element?.rect.width;
+      // double? height = element?.rect.height;
+      // element?.rect.left = top!;
+      // element?.rect.top = left!;
+      // element?.rect.right = bottom!;
+      // element?.rect.bottom = right!;
+      // element?.rect.width = height!;
+      // element?.rect.height = width!;
       print({
         "score": element?.score,
         "className": element?.className,
@@ -44,7 +55,7 @@ class _ImagePageState extends State<ImagePage> {
       });
     });
     setState(() {
-      image = File(image.path);
+      // image = File(image.path);
     });
   }
 
@@ -66,9 +77,9 @@ class _ImagePageState extends State<ImagePage> {
       body: Stack(
         children: [
           objectModel.renderBoxesOnImage(image, objDetect, boxesColor: const Color.fromARGB(255, 0, 242, 255)),
-          Center(
-            child: Image(image: FileImage(widget.image)),
-          ),
+          // Center(
+          //   child: Image(image: FileImage(widget.image)),
+          // ),
           Container(
             alignment: Alignment.bottomCenter,
             child: ElevatedButton(
