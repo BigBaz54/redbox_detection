@@ -76,7 +76,7 @@ class _ImagePageState extends State<ImagePage> {
         ),
       body: Stack(
         children: [
-          objectModel.renderBoxesOnImage(image, objDetect, boxesColor: const Color.fromARGB(255, 0, 242, 255)),
+          objectModel.renderBoxesOnImage(image, objDetect, boxesColor: Color.fromARGB(255, 68, 255, 0)),
           // Center(
           //   child: Image(image: FileImage(widget.image)),
           // ),
