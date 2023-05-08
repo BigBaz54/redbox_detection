@@ -107,7 +107,6 @@ class _HomePageState extends State<HomePage> {
   
   Future<void> pickImage(ImageSource source) async {
     final image = await _picker.pickImage(source: source);
-    // await getLostData();
     if (image != null && (image.path.endsWith('.jpg') || image.path.endsWith('.jpeg') || image.path.endsWith('.png'))) {
       _image = File(image.path);
     }
