@@ -26,20 +26,8 @@ class _ImagePageState extends State<ImagePage> {
     objDetect = await objectModel.getImagePrediction(
         await image.readAsBytes(),
         minimumScore: 0.3,
-        IOUThershold: 0.3);
+        IOUThershold: 0.5);
     objDetect.forEach((element) {
-      // double? left = element?.rect.left;
-      // double? top = element?.rect.top;
-      // double? right = element?.rect.right;
-      // double? bottom = element?.rect.bottom;
-      // double? width = element?.rect.width;
-      // double? height = element?.rect.height;
-      // element?.rect.left = top!;
-      // element?.rect.top = left!;
-      // element?.rect.right = bottom!;
-      // element?.rect.bottom = right!;
-      // element?.rect.width = height!;
-      // element?.rect.height = width!;
       print({
         "score": element?.score,
         "className": element?.className,
@@ -76,10 +64,25 @@ class _ImagePageState extends State<ImagePage> {
         ),
       body: Stack(
         children: [
-          objectModel.renderBoxesOnImage(image, objDetect, boxesColor: Color.fromARGB(255, 68, 255, 0)),
-          // Center(
-          //   child: Image(image: FileImage(widget.image)),
-          // ),
+          LayoutBuilder(builder: (context, constraints) {
+            double maxWidth = constraints.maxWidth;
+            double maxHeight = constraints.maxHeight;
+            return Stack(children: 
+            [
+              Positioned(
+                left: 0,
+                top: 0,
+                width: maxWidth,
+                height: maxHeight,
+                child: Container(
+                    child: Image.file(
+                      image,
+                      fit: BoxFit.fill,
+                    )),
+              )
+            ]);
+          }),
+          renderBoxesWithoutImage(objDetect, boxesColor: Color.fromARGB(255, 68, 255, 0)),
           Container(
             alignment: Alignment.bottomCenter,
             child: ElevatedButton(
@@ -94,6 +97,77 @@ class _ImagePageState extends State<ImagePage> {
         ],
       ),
     );
+  }
+
+  Widget renderBoxesWithoutImage(
+    List<ResultObjectDetection?> _recognitions,
+      {Color? boxesColor, bool showPercentage = true}) {
+
+    return LayoutBuilder(builder: (context, constraints) {
+      debugPrint(
+          'Max height: ${constraints.maxHeight}, max width: ${constraints.maxWidth}');
+      double factorX = constraints.maxWidth;
+      double factorY = constraints.maxHeight;
+      return Stack(
+        children: [
+          ..._recognitions.map((re) {
+            if (re == null) {
+              return Container();
+            }
+            Color usedColor;
+            if (boxesColor == null) {
+              //change colors for each label
+              usedColor = Colors.primaries[
+              ((re.className ?? re.classIndex.toString()).length +
+                  (re.className ?? re.classIndex.toString())
+                      .codeUnitAt(0) +
+                  re.classIndex) %
+                  Colors.primaries.length];
+            } else {
+              usedColor = boxesColor;
+            }
+
+            print({
+              "left": re.rect.left.toDouble() * factorX,
+              "top": re.rect.top.toDouble() * factorY,
+              "width": re.rect.width.toDouble() * factorX,
+              "height": re.rect.height.toDouble() * factorY,
+            });
+            return Positioned(
+              left: re.rect.left * factorX,
+              top: re.rect.top * factorY - 20,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 20,
+                    alignment: Alignment.centerRight,
+                    color: usedColor,
+                    child: Text(
+                      (re.className ?? re.classIndex.toString()) +
+                          "_" +
+                          (showPercentage
+                              ? (re.score * 100).toStringAsFixed(2) + "%"
+                              : ""),
+                    ),
+                  ),
+                  Container(
+                    width: re.rect.width.toDouble() * factorX,
+                    height: re.rect.height.toDouble() * factorY,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: usedColor, width: 3),
+                        borderRadius: BorderRadius.all(Radius.circular(2))),
+                    child: Container(),
+                  ),
+                ],
+              ),
+            );
+          }).toList()
+        ],
+      );
+    });
   }
 }
 
