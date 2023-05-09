@@ -6,6 +6,8 @@ import 'package:flutter_pytorch/flutter_pytorch.dart';
 import 'package:flutter_pytorch/pigeon.dart';
 import 'home_page.dart';
 import 'package:flutter/services.dart';
+import 'package:cpu_reader/cpu_reader.dart';
+import 'package:cpu_reader/cpuinfo.dart';
 
 class DetectionPage extends StatefulWidget {
   const DetectionPage({required this.cameras, required this.objectModel, Key? key}) : super(key: key);
@@ -23,6 +25,9 @@ class _DetectionPageState extends State<DetectionPage> {
   late ModelObjectDetection objectModel = widget.objectModel;
   List<ResultObjectDetection?> objDetect = [];
   final platform = const MethodChannel('com.example.recognition_app');
+  double cpuTemp = -1;
+  int cpuFreq = -1;
+
   int nthFrame = 100;
   int counter = 0;
 
@@ -45,6 +50,12 @@ class _DetectionPageState extends State<DetectionPage> {
           counter = 0;
           var convImg = await convertCameraImageToPNG(img);
           runObjectDetection(convImg);
+
+          CpuInfo cpuInfo = await CpuReader.cpuInfo;
+          int freq = await CpuReader.getCurrentFrequency(1) ?? -1;
+          double temp = cpuInfo.cpuTemperature ?? -1;
+          cpuFreq = freq;
+          cpuTemp = temp;
         } else {
           counter++;
         }
@@ -199,6 +210,18 @@ class _DetectionPageState extends State<DetectionPage> {
                                     height: MediaQuery.of(context).size.height,
                                     width: MediaQuery.of(context).size.width,
                                     child: CameraPreview(cameraController))),
+            // text with cpuFred and cpuTemp
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Text(
+                  "CPU freq: $cpuFreq\nCPU temp: $cpuTemp",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
             renderBoxesWithoutImage(objDetect, boxesColor: Color.fromARGB(255, 68, 255, 0)),
                                     
           ],
