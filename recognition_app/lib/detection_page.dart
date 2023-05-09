@@ -1,13 +1,10 @@
 // ignore_for_file: avoid_print
 
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_pytorch/flutter_pytorch.dart';
 import 'package:flutter_pytorch/pigeon.dart';
 import 'home_page.dart';
-import 'package:image/image.dart' as imglib;
 import 'package:flutter/services.dart';
 
 class DetectionPage extends StatefulWidget {
