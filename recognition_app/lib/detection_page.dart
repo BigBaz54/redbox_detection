@@ -107,6 +107,19 @@ class _DetectionPageState extends State<DetectionPage> {
           "bottom": element?.rect.bottom,
         },
       });
+      var temp = element?.rect.top;
+      element?.rect.top = element.rect.left;
+      element?.rect.left = element.rect.bottom;
+      element?.rect.bottom = element.rect.right;
+      element?.rect.right = temp!;
+
+      // symetry by y axis
+      element?.rect.left = 1 - element.rect.left;  
+      element?.rect.right = 1 - element.rect.right;
+
+      temp = element?.rect.width;
+      element?.rect.width = element.rect.height;
+      element?.rect.height = temp!;
     });
     setState(() {
       // image = File(image.path);
