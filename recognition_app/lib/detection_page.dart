@@ -94,7 +94,7 @@ class _DetectionPageState extends State<DetectionPage> {
         minimumScore: 0.3,
         IOUThershold: 0.5);
     objDetect.forEach((element) {
-      print({
+      print({"state" : "before correction",
         "score": element?.score,
         "className": element?.className,
         "class": element?.classIndex,
@@ -251,7 +251,7 @@ class _DetectionPageState extends State<DetectionPage> {
                 ),
               ),
             ),
-            SizedBox(height: 200, width: 200, child: Positioned(top: 0, left:0, child: Image.memory(displayedImg ?? Uint8List(1)))),
+            // SizedBox(height: 200, width: 200, child: Positioned(top: 0, left:0, child: Image.memory(displayedImg ?? Uint8List(1)))),
             renderBoxesWithoutImage(objDetect, boxesColor: Color.fromARGB(255, 68, 255, 0)),
           ],
         ),
