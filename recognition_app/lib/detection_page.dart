@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_pytorch/flutter_pytorch.dart';
@@ -28,10 +30,11 @@ class _DetectionPageState extends State<DetectionPage> {
   double cpuTemp = -1;
   int cpuFreq = -1;
 
-  int nthFrame = 100;
-  int counter = 0;
-
   int direction = 0;
+
+  int delayBetweenFrames = 1000;
+
+  Uint8List? displayedImg;
 
   @override
   void initState() {
@@ -40,30 +43,43 @@ class _DetectionPageState extends State<DetectionPage> {
   }
 
   void startCamera(int direction) async {
-    cameraController = CameraController(cameras[direction], ResolutionPreset.medium, enableAudio: false);
+    cameraController = CameraController(cameras[direction], ResolutionPreset.high, enableAudio: false);
     await cameraController.initialize().then((value) {
       if (!mounted) {
         return;
       }
-      cameraController.startImageStream((CameraImage img) async {
-        if (counter >= nthFrame) {
-          counter = 0;
-          var convImg = await convertCameraImageToPNG(img);
-          runObjectDetection(convImg);
-
-          CpuInfo cpuInfo = await CpuReader.cpuInfo;
-          int freq = await CpuReader.getCurrentFrequency(1) ?? -1;
-          double temp = cpuInfo.cpuTemperature ?? -1;
-          cpuFreq = freq;
-          cpuTemp = temp;
-        } else {
-          counter++;
-        }
-      });
+      startDetection();
       setState(() {});
     }).catchError((e) {
       print(e);
     });
+  }
+
+  void startDetection() async {
+    while (true) {
+      await Future.delayed(Duration(milliseconds: delayBetweenFrames));
+      Uint8List imgBytes = await takePic();
+      print(imgBytes.lengthInBytes);
+      runObjectDetection(imgBytes);
+      updateMetrics();
+    }
+  }
+
+  Future<Uint8List> takePic() async {
+    var path = (await cameraController.takePicture()).path;
+    print(path);
+    var imgFile = File(path);
+    var imgBytes = await imgFile.readAsBytes();
+    displayedImg = imgBytes;
+    return imgBytes;
+  }
+
+  void updateMetrics() async {
+    CpuInfo cpuInfo = await CpuReader.cpuInfo;
+    int freq = await CpuReader.getCurrentFrequency(1) ?? -1;
+    double temp = cpuInfo.cpuTemperature ?? -1;
+    cpuFreq = freq;
+    cpuTemp = temp;
   }
 
   @override
@@ -75,7 +91,7 @@ class _DetectionPageState extends State<DetectionPage> {
   Future runObjectDetection(imageAsBytes) async {
     objDetect = await objectModel.getImagePrediction(
         imageAsBytes,
-        minimumScore: 0.6,
+        minimumScore: 0.3,
         IOUThershold: 0.5);
     objDetect.forEach((element) {
       print({
@@ -222,8 +238,8 @@ class _DetectionPageState extends State<DetectionPage> {
                 ),
               ),
             ),
+            SizedBox(height: 200, width: 200, child: Positioned(top: 0, left:0, child: Image.memory(displayedImg ?? Uint8List(1)))),
             renderBoxesWithoutImage(objDetect, boxesColor: Color.fromARGB(255, 68, 255, 0)),
-                                    
           ],
         ),
         floatingActionButton: FloatingActionButton(
