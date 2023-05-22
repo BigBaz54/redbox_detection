@@ -89,10 +89,12 @@ class _DetectionPageState extends State<DetectionPage> {
   }
 
   Future runObjectDetection(imageAsBytes) async {
+    final stopwatch = Stopwatch()..start();
     objDetect = await objectModel.getImagePrediction(
         imageAsBytes,
         minimumScore: 0.6,
         IOUThershold: 0.6);
+    print('\n\nrunObjectDetection() executed in ${stopwatch.elapsed.inMilliseconds} milliseconds');
     objDetect.forEach((element) {
       print({"state" : "before correction",
         "score": element?.score,
