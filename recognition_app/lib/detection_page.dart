@@ -32,7 +32,7 @@ class _DetectionPageState extends State<DetectionPage> {
 
   int direction = 0;
 
-  int delayBetweenFrames = 1000;
+  int delayBetweenFrames = 0;
 
   Uint8List? displayedImg;
 
@@ -91,8 +91,8 @@ class _DetectionPageState extends State<DetectionPage> {
   Future runObjectDetection(imageAsBytes) async {
     objDetect = await objectModel.getImagePrediction(
         imageAsBytes,
-        minimumScore: 0.3,
-        IOUThershold: 0.5);
+        minimumScore: 0.6,
+        IOUThershold: 0.6);
     objDetect.forEach((element) {
       print({"state" : "before correction",
         "score": element?.score,
